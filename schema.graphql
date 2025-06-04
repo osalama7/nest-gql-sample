@@ -1,0 +1,30 @@
+
+type Author { 
+    id: Int!
+    firstName: String
+    lastName: String
+    """
+    the list of Subjects by this author
+    """
+    Subjects: [Subject]
+}
+
+type Subject {
+    id: Int!
+    title: String
+    content: String
+    author: Author
+}
+
+
+type Query {
+    subjects: [Subject]
+    author(id: Int!): Author
+    authors: [Author]
+}
+
+
+type Mutation {
+    createSubject(title: String!, content: String!, authorId: Int!): Subject
+}
+

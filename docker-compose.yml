@@ -1,0 +1,27 @@
+# Use postgres/example user/password credentials
+
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # set environment variables for postgres  
+    environment:
+      POSTGRES_PASSWORD: 'nestpass'
+      POSTGRES_USER: 'nestuser'
+      POSTGRES_DB: 'nestgql'
+      TZ: UTC
+      LANG: en_US.UTF-8
+
+volumes:
+  postgres_data: 
+    driver: local
+ 

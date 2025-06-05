@@ -68,6 +68,12 @@ npm exec prisma migrate deploy
 npm exec prisma generate
 ```
 
+### 5. Run Database seeds
+
+```bash
+npx prisma db seed 
+```
+
 ---
 
 ## GraphQL Code Generation

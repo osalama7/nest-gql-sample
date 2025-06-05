@@ -10,5 +10,5 @@ export class Subject {
   title: string;
 
   @Field((type) => String, { nullable: true })
-  content: string | null;
+  content: string;
 }

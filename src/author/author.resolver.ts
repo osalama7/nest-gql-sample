@@ -1,6 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
-import { Author } from './../generated/graphql';
 import { AuthorsService } from './author.service';
 
 @Resolver('Author')
@@ -8,14 +7,14 @@ export class AuthorResolver {
   constructor(private readonly authorService: AuthorsService) {}
 
   @Query('authors')
-  getAuthors(): Author[] {
+  async getAuthors() {
     console.log('Fetching all authors from resolver');
     return this.authorService.findAll();
   }
 
   @Query('author')
-  async getAuthor(@Args('id') id: number): Promise<Author | null> {
+  async getAuthor(@Args('id') id: number) {
     console.log(`Fetching author with ID: ${id}`);
-    return await this.authorService.findOneById(id);
+    return this.authorService.findOneById(id);
   }
 }

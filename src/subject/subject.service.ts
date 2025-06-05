@@ -1,48 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { Subject } from '../generated/graphql';
+import { Injectable, Inject } from '@nestjs/common';
+import { PrismaService } from './../prisma.service';
+import { CreateSubjectDto } from './subject.dto';
+import { Subject } from './subject.entity';
 
 @Injectable()
 export class SubjectsService {
-  private readonly subjects: Subject[] = [
-    {
-      id: 1,
-      title: 'Introduction to GraphQL',
-      content: "A beginner's guide to GraphQL",
-    },
-    {
-      id: 2,
-      title: 'Advanced GraphQL Techniques',
-      content: 'Deep dive into GraphQL features',
-    },
-    {
-      id: 3,
-      title: 'GraphQL Best Practices',
-      content: 'Best practices for GraphQL development',
-    },
-    {
-      id: 4,
-      title: 'GraphQL and TypeScript',
-      content: 'Using GraphQL with TypeScript',
-    },
-    {
-      id: 5,
-      title: 'GraphQL Performance Optimization',
-      content: 'Optimizing GraphQL queries for performance',
-    },
-  ];
-
-  findOneById(id: number): Subject | undefined {
-    return this.subjects.find((subject) => subject.id === id);
+  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  async findOneById(id: number) {
+    return this.prismaService.subject.findUniqueOrThrow({
+      where: { id },
+    });
   }
 
-  findAll(): Subject[] {
-    console.log('Fetching all subjects');
-    return this.subjects;
+  async findAll() {
+    return this.prismaService.subject.findMany();
   }
 
-  createOne(subject: Subject): Subject {
-    const newSubject = { ...subject, id: this.subjects.length + 1 };
-    this.subjects.push(newSubject);
-    return newSubject;
+  async createOne(subject: CreateSubjectDto) {
+    return this.prismaService.subject.create({ data: subject });
   }
 }

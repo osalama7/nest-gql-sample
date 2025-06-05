@@ -7,7 +7,7 @@ A starter repository for building efficient, scalable server-side applications w
 ## Project Setup
 
 ```bash
-pnpm install
+npm install
 ```
 
 ## Development
@@ -15,27 +15,27 @@ pnpm install
 Start the development server:
 
 ```bash
-pnpm run start:dev
+npm run start:dev
 ```
 
 ## Production Build
 
 ```bash
-pnpm run build
-pnpm run start:prod
+npm run build
+npm run start:prod
 ```
 
 ## Testing
 
 ```bash
 # Unit tests
-pnpm run test
+npm run test
 
 # E2E tests
-pnpm run test:e2e
+npm run test:e2e
 
 # Test coverage
-pnpm run test:cov
+npm run test:cov
 ```
 
 ---
@@ -59,13 +59,13 @@ DATABASE_URL="postgresql://nestuser:nestpass@localhost:5432/nestgql?schema=publi
 ### 3. Run Prisma Migrations
 
 ```bash
-pnpm exec prisma migrate deploy
+npm exec prisma migrate deploy
 ```
 
 ### 4. Generate Prisma Client
 
 ```bash
-pnpm exec prisma generate
+npm exec prisma generate
 ```
 
 ---
@@ -81,7 +81,7 @@ Edit [`schema.graphql`](schema.graphql) as needed.
 ### 2. Generate Types
 
 ```bash
-pnpm run codegen
+npm run codegen
 ```
 
 This will generate types in [`src/generated/graphql.ts`](src/generated/graphql.ts).
@@ -110,9 +110,9 @@ export class ExampleService {
 ## Useful Commands
 
 - **Format code:**  
-  `pnpm run format`
+  `npm run format`
 - **Lint code:**  
-  `pnpm run lint`
+  `npm run lint`
 
 ---
 
@@ -126,4 +126,4 @@ export class ExampleService {
 
 ## License
 
-MIT
+UNLICENSED

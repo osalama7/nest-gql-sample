@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from './../prisma.service';
 import { CreateSubjectDto } from './subject.dto';
-import { Subject } from './subject.entity';
+
 
 @Injectable()
 export class SubjectsService {

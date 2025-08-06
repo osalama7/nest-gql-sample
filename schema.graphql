@@ -16,15 +16,47 @@ type Subject {
     author: Author
 }
 
+enum UserInputType {
+    QUESTION
+    ANSWER
+    COMMENT
+    FEEDBACK
+    STATEMENT
+    SUGGESTION
+    IDEA
+}
+
+type UserInput {
+    id: Int!
+    content: String
+    author: Author
+    subject: Subject
+    type: UserInputType
+}
+
 
 type Query {
     subjects: [Subject]
     author(id: Int!): Author
     authors: [Author]
+    userInputsBySubject(id: Int!): [UserInput]
 }
 
 
 type Mutation {
-    createSubject(title: String!, content: String!, authorId: Int!): Subject
+    createSubject(input: CreateSubject!): Subject
+    createUserInput(input: CreateUserInput!): Boolean
+}
+
+input CreateSubject {
+    title: String
+    content: String
+}
+
+input CreateUserInput {
+    author: Int!
+    subject: Int!
+    content: String!
+    type: UserInputType!
 }
 

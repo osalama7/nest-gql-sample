@@ -1,9 +1,13 @@
-import { IsString } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+import { Length } from 'class-validator';
 
+@InputType()
 export class CreateSubjectDto {
-  @IsString()
+  @Field()
+  @Length(1, 255)
   title: string;
 
-  @IsString()
+  @Field()
+  @Length(1, 1000)
   content: string;
 }

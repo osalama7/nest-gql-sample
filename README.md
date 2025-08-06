@@ -74,6 +74,9 @@ npm exec prisma generate
 npx prisma db seed 
 ```
 
+### 6. Generate new migrations
+```bash
+npx prisma migrate dev --name <migration-name>
 ---
 
 ## GraphQL Code Generation

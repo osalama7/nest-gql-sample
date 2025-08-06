@@ -31,27 +31,13 @@ const userData: Prisma.AuthorCreateInput[] = [
 
 const subjectData: Prisma.SubjectCreateInput[] = [
   {
-    title: 'Introduction to Programming',
-    content: 'This course covers the basics of programming using Python.',
+    title: 'Deployment strategy',
+    content: 'This discussion covers deployment strategies for APIs and web apps.',
   },
   {
-    title: 'Advanced Database Systems',
+    title: 'Mobile apps',
     content:
-      'This course explores advanced topics in database management systems.',
-  },
-  {
-    title: 'Web Development Fundamentals',
-    content:
-      'Learn the fundamentals of web development including HTML, CSS, and JavaScript.',
-  },
-  {
-    title: 'Machine Learning Basics',
-    content: 'An introduction to machine learning concepts and algorithms.',
-  },
-  {
-    title: 'Data Science with Python',
-    content:
-      'This course teaches data science techniques using Python libraries.',
+      'This topic explores the development and design of mobile applications.',
   },
 ];
 

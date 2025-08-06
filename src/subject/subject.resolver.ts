@@ -1,5 +1,4 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-
 import { CreateSubjectDto } from './subject.dto';
 import { SubjectsService } from './subject.service';
 
@@ -14,10 +13,10 @@ export class SubjectResolver {
   }
 
   @Mutation('createSubject')
-  createSubject(@Args('subject') subject: CreateSubjectDto) {
+  createSubject(@Args('input') args: CreateSubjectDto) {
     return this.subjectService.createOne({
-      title: subject.title,
-      content: subject.content,
+      title: args.title,
+      content: args.content,
     });
   }
 }

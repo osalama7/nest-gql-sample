@@ -14,16 +14,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Author {
-  id    Int     @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   firstName String?
   lastName  String?
+  UserInput UserInput[]
 }
 
-
 model Subject {
-  id    Int     @id @default(autoincrement())
-  title String?
-  content  String?
+  id      Int     @id @default(autoincrement())
+  title   String?
+  content String?
+
+  UserInput UserInput[]
+}
+
+enum UserInputType {
+  QUESTION
+  ANSWER
+  COMMENT
+  FEEDBACK
+  STATEMENT
+  SUGGESTION
+  IDEA
+}
+
+model UserInput {
+  id        Int           @id @default(autoincrement())
+  type      UserInputType
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now())
+  authorId  Int
+  subjectId Int
+  content   String        @db.VarChar(500)
+
+  author  Author  @relation(fields: [authorId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
 }

@@ -25,26 +25,49 @@ export type Author = {
   lastName?: Maybe<Scalars['String']['output']>;
 };
 
+export type CreateSubject = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateUserInput = {
+  author: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  subject: Scalars['Int']['input'];
+  type: UserInputType;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createSubject?: Maybe<Subject>;
+  createUserInput?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
 export type MutationCreateSubjectArgs = {
-  authorId: Scalars['Int']['input'];
-  content: Scalars['String']['input'];
-  title: Scalars['String']['input'];
+  input: CreateSubject;
+};
+
+
+export type MutationCreateUserInputArgs = {
+  input: CreateUserInput;
 };
 
 export type Query = {
   __typename?: 'Query';
   author?: Maybe<Author>;
+  authors?: Maybe<Array<Maybe<Author>>>;
   subjects?: Maybe<Array<Maybe<Subject>>>;
+  userInputsBySubject?: Maybe<Array<Maybe<UserInput>>>;
 };
 
 
 export type QueryAuthorArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryUserInputsBySubjectArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -55,6 +78,25 @@ export type Subject = {
   id: Scalars['Int']['output'];
   title?: Maybe<Scalars['String']['output']>;
 };
+
+export type UserInput = {
+  __typename?: 'UserInput';
+  author?: Maybe<Author>;
+  content?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  subject?: Maybe<Subject>;
+  type?: Maybe<UserInputType>;
+};
+
+export enum UserInputType {
+  Answer = 'ANSWER',
+  Comment = 'COMMENT',
+  Feedback = 'FEEDBACK',
+  Idea = 'IDEA',
+  Question = 'QUESTION',
+  Statement = 'STATEMENT',
+  Suggestion = 'SUGGESTION'
+}
 
 
 
@@ -129,22 +171,29 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Author: ResolverTypeWrapper<Author>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateSubject: CreateSubject;
+  CreateUserInput: CreateUserInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subject: ResolverTypeWrapper<Subject>;
+  UserInput: ResolverTypeWrapper<UserInput>;
+  UserInputType: UserInputType;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Author: Author;
   Boolean: Scalars['Boolean']['output'];
+  CreateSubject: CreateSubject;
+  CreateUserInput: CreateUserInput;
   Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   Subject: Subject;
+  UserInput: UserInput;
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
@@ -156,12 +205,15 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createSubject?: Resolver<Maybe<ResolversTypes['Subject']>, ParentType, ContextType, RequireFields<MutationCreateSubjectArgs, 'authorId' | 'content' | 'title'>>;
+  createSubject?: Resolver<Maybe<ResolversTypes['Subject']>, ParentType, ContextType, RequireFields<MutationCreateSubjectArgs, 'input'>>;
+  createUserInput?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateUserInputArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   author?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorArgs, 'id'>>;
+  authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   subjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['Subject']>>>, ParentType, ContextType>;
+  userInputsBySubject?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserInput']>>>, ParentType, ContextType, RequireFields<QueryUserInputsBySubjectArgs, 'id'>>;
 };
 
 export type SubjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subject'] = ResolversParentTypes['Subject']> = {
@@ -172,10 +224,20 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserInputResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserInput'] = ResolversParentTypes['UserInput']> = {
+  author?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType>;
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  subject?: Resolver<Maybe<ResolversTypes['Subject']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['UserInputType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Author?: AuthorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
+  UserInput?: UserInputResolvers<ContextType>;
 };
 

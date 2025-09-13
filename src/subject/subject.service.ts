@@ -1,21 +1,23 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { PrismaService } from './../prisma.service';
+import { PrismaService } from '../prisma.service';
 import { CreateSubjectDto } from './subject.dto';
 
 @Injectable()
 export class SubjectsService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
   async findOneById(id: number) {
-    return this.prismaService.subject.findUniqueOrThrow({
+    return this.prismaService.extendedPrismaClient().subject.findUniqueOrThrow({
       where: { id },
     });
   }
 
   async findAll() {
-    return this.prismaService.subject.findMany();
+    return this.prismaService.extendedPrismaClient().subject.findMany();
   }
 
   async createOne(subject: CreateSubjectDto) {
-    return this.prismaService.subject.create({ data: subject });
+    return this.prismaService
+      .extendedPrismaClient()
+      .subject.create({ data: subject });
   }
 }

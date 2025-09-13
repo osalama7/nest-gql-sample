@@ -3,12 +3,12 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class Subject {
-  @Field((type) => Int)
+  @Field(() => Int)
   id: number;
 
-  @Field((type) => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   title: string;
 
-  @Field((type) => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   content: string;
 }

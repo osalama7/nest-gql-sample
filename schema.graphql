@@ -1,4 +1,8 @@
 
+scalar DateTime
+scalar Date
+
+
 type Author { 
     id: Int!
     firstName: String
@@ -26,11 +30,13 @@ enum UserInputType {
     IDEA
 }
 
-type UserInput {
+type UserMessage {
     id: Int!
     content: String
-    author: Author
-    subject: Subject
+    author: Author!
+    subject: Subject!
+    createdAt: Date!
+    updatedAt: Date!
     type: UserInputType
 }
 
@@ -38,8 +44,9 @@ type UserInput {
 type Query {
     subjects: [Subject]
     author(id: Int!): Author
+    authorByName(firstName: String!, lastName: String!): Author
     authors: [Author]
-    userInputsBySubject(id: Int!): [UserInput]
+    userInputsBySubject(id: Int!): [UserMessage]
 }
 
 
@@ -58,5 +65,9 @@ input CreateUserInput {
     subject: Int!
     content: String!
     type: UserInputType!
+    sentAt: Date!
 }
 
+type Subscription {
+  userInputCreated: UserMessage
+}

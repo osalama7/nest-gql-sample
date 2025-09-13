@@ -6,8 +6,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { AuthorsModule } from './author/author.module';
 import { SubjectModule } from './subject/subject.module';
 import { UserInputModule } from './user-input/user-input.module';
-import { PrismaService } from './prisma.service';
-
+// import { PrismaService } from './common/prisma/prisma.service';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -22,6 +21,6 @@ import { PrismaService } from './prisma.service';
     }),
   ],
   controllers: [],
-  providers: [PrismaService],
+  // providers: [PrismaService],
 })
 export class AppModule {}

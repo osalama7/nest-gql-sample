@@ -14,7 +14,14 @@ export class AuthorResolver {
 
   @Query('author')
   async getAuthor(@Args('id') id: number) {
-    console.log(`Fetching author with ID: ${id}`);
     return this.authorService.findOneById(id);
+  }
+
+  @Query('authorByName')
+  async getAuthorByName(
+    @Args('firstName') firstName: string,
+    @Args('lastName') lastName: string,
+  ) {
+    return this.authorService.findOneByName(firstName, lastName);
   }
 }

@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,6 +14,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Date: { input: any; output: any; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Author = {
@@ -33,6 +35,7 @@ export type CreateSubject = {
 export type CreateUserInput = {
   author: Scalars['Int']['input'];
   content: Scalars['String']['input'];
+  sentAt: Scalars['Date']['input'];
   subject: Scalars['Int']['input'];
   type: UserInputType;
 };
@@ -56,14 +59,21 @@ export type MutationCreateUserInputArgs = {
 export type Query = {
   __typename?: 'Query';
   author?: Maybe<Author>;
+  authorByName?: Maybe<Author>;
   authors?: Maybe<Array<Maybe<Author>>>;
   subjects?: Maybe<Array<Maybe<Subject>>>;
-  userInputsBySubject?: Maybe<Array<Maybe<UserInput>>>;
+  userInputsBySubject?: Maybe<Array<Maybe<UserMessage>>>;
 };
 
 
 export type QueryAuthorArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryAuthorByNameArgs = {
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
 };
 
 
@@ -79,13 +89,9 @@ export type Subject = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
-export type UserInput = {
-  __typename?: 'UserInput';
-  author?: Maybe<Author>;
-  content?: Maybe<Scalars['String']['output']>;
-  id: Scalars['Int']['output'];
-  subject?: Maybe<Subject>;
-  type?: Maybe<UserInputType>;
+export type Subscription = {
+  __typename?: 'Subscription';
+  userInputCreated?: Maybe<UserMessage>;
 };
 
 export enum UserInputType {
@@ -97,6 +103,17 @@ export enum UserInputType {
   Statement = 'STATEMENT',
   Suggestion = 'SUGGESTION'
 }
+
+export type UserMessage = {
+  __typename?: 'UserMessage';
+  author: Author;
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['Int']['output'];
+  subject: Subject;
+  type?: Maybe<UserInputType>;
+  updatedAt: Scalars['Date']['output'];
+};
 
 
 
@@ -173,13 +190,16 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateSubject: CreateSubject;
   CreateUserInput: CreateUserInput;
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subject: ResolverTypeWrapper<Subject>;
-  UserInput: ResolverTypeWrapper<UserInput>;
+  Subscription: ResolverTypeWrapper<{}>;
   UserInputType: UserInputType;
+  UserMessage: ResolverTypeWrapper<UserMessage>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -188,12 +208,15 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateSubject: CreateSubject;
   CreateUserInput: CreateUserInput;
+  Date: Scalars['Date']['output'];
+  DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   Subject: Subject;
-  UserInput: UserInput;
+  Subscription: {};
+  UserMessage: UserMessage;
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
@@ -204,6 +227,14 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createSubject?: Resolver<Maybe<ResolversTypes['Subject']>, ParentType, ContextType, RequireFields<MutationCreateSubjectArgs, 'input'>>;
   createUserInput?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateUserInputArgs, 'input'>>;
@@ -211,9 +242,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   author?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorArgs, 'id'>>;
+  authorByName?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByNameArgs, 'firstName' | 'lastName'>>;
   authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   subjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['Subject']>>>, ParentType, ContextType>;
-  userInputsBySubject?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserInput']>>>, ParentType, ContextType, RequireFields<QueryUserInputsBySubjectArgs, 'id'>>;
+  userInputsBySubject?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserMessage']>>>, ParentType, ContextType, RequireFields<QueryUserInputsBySubjectArgs, 'id'>>;
 };
 
 export type SubjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subject'] = ResolversParentTypes['Subject']> = {
@@ -224,20 +256,29 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserInputResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserInput'] = ResolversParentTypes['UserInput']> = {
-  author?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType>;
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  userInputCreated?: SubscriptionResolver<Maybe<ResolversTypes['UserMessage']>, "userInputCreated", ParentType, ContextType>;
+};
+
+export type UserMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserMessage'] = ResolversParentTypes['UserMessage']> = {
+  author?: Resolver<ResolversTypes['Author'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['Subject']>, ParentType, ContextType>;
+  subject?: Resolver<ResolversTypes['Subject'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['UserInputType']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Author?: AuthorResolvers<ContextType>;
+  Date?: GraphQLScalarType;
+  DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
-  UserInput?: UserInputResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  UserMessage?: UserMessageResolvers<ContextType>;
 };
 

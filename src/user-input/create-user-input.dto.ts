@@ -14,6 +14,9 @@ export class CreateUserInputDto {
   @Length(1, 500)
   content: string;
 
-  @Field(type => UserInputType)
+  @Field(() => UserInputType)
   type: UserInputType;
+
+  @Field()
+  sentAt: Date;
 }

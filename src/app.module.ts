@@ -6,7 +6,9 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { AuthorsModule } from './author/author.module';
 import { SubjectModule } from './subject/subject.module';
 import { UserInputModule } from './user-input/user-input.module';
-// import { PrismaService } from './common/prisma/prisma.service';
+import { ErrorsInterceptor } from './common/interceptors/exception.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -20,7 +22,7 @@ import { UserInputModule } from './user-input/user-input.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
   ],
+  providers: [{ provide: APP_INTERCEPTOR, useClass: ErrorsInterceptor }],
   controllers: [],
-  // providers: [PrismaService],
 })
 export class AppModule {}
